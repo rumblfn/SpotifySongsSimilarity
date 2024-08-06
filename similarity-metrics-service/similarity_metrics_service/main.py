@@ -18,7 +18,6 @@ data.fillna(0, inplace=True)
 for feature in FEATURES:
     data[feature] = data[feature].astype(str).str.replace(',', '').astype(float)
 
-# Normalization.
 print("Normalizing data...")
 scaler = StandardScaler()
 data_scaled = pd.DataFrame(scaler.fit_transform(data[FEATURES]), columns=FEATURES)
@@ -31,7 +30,7 @@ print("Creating nodes...")
 nodes = []
 for index, row in data.iterrows():
     nodes.append({
-        "id": row["Track"],
+        "name": row["Track"],
         "cluster": row["Cluster"]
     })
 save_json(nodes, "nodes.json")
@@ -43,8 +42,8 @@ for i in range(len(data)):
     for j in range(i + 1, len(data)):
         if similarity_matrix[i, j] > 0.8:
             links.append({
-                "source": data.iloc[i]["Track"],
-                "target": data.iloc[j]["Track"]
+                "from": data.iloc[i]["Track"],
+                "to": data.iloc[j]["Track"]
             })
 
 save_json(links, "links.json")
