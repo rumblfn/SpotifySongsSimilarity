@@ -1,12 +1,12 @@
+import {useNodesStore} from "entities/nodes";
+
 export function MapOfSpotifyPage() {
+  const nodes = useNodesStore(state => state.nodes)
+  console.log(nodes)
+
   return (
-    <div className="home-page">
-      <div className="banner">
-        <div className="container">
-          <h1 className="logo-font">Map of spotify</h1>
-          <p>Graph clustering.</p>
-        </div>
-      </div>
+    <div className="page">
+
     </div>
   );
 }
