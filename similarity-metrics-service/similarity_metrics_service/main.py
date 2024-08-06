@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.cluster import KMeans
 
 from similarity_metrics_service.constants import FEATURES, CLUSTERS_COUNT
@@ -26,12 +26,17 @@ print("Loading model...")
 kmeans = KMeans(n_clusters=CLUSTERS_COUNT)
 data['Cluster'] = kmeans.fit_predict(data_scaled)
 
+data['Popularity'] = data[FEATURES].sum(axis=1)
+scaler = MinMaxScaler(feature_range=(0.3, 1.0))
+data['Radius'] = scaler.fit_transform(data[['Popularity']])
+
 print("Creating nodes...")
 nodes = []
 for index, row in data.iterrows():
     nodes.append({
         "name": row["Track"],
-        "cluster": row["Cluster"]
+        "cluster": row["Cluster"],
+        "radius": row["Radius"],
     })
 save_json(nodes, "nodes.json")
 
