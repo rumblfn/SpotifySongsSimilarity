@@ -1,9 +1,10 @@
+import random
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.cluster import KMeans
 
-from similarity_metrics_service.constants import FEATURES, CLUSTERS_COUNT
+from similarity_metrics_service.constants import *
 from similarity_metrics_service.utils import save_json
 
 print("Program started.")
@@ -32,12 +33,28 @@ data['Radius'] = scaler.fit_transform(data[['Popularity']])
 
 print("Creating nodes...")
 nodes = []
+cluster_areas = []
+cluster_width = WINDOW_WIDTH // CLUSTERS_COUNT
+cluster_height = WINDOW_HEIGHT // CLUSTERS_COUNT
+
+for cluster_id in range(CLUSTERS_COUNT):
+    x_min = (cluster_id % (WINDOW_WIDTH // cluster_width)) * cluster_width
+    y_min = (cluster_id // (WINDOW_WIDTH // cluster_width)) * cluster_height
+    x_max = x_min + cluster_width
+    y_max = y_min + cluster_height
+    cluster_areas.append((x_min, y_min, x_max, y_max))
+
 for index, row in data.iterrows():
+    cluster_id = row['Cluster']
+    x_min, y_min, x_max, y_max = cluster_areas[cluster_id]
     nodes.append({
         "name": row["Track"],
         "cluster": row["Cluster"],
         "radius": row["Radius"],
+        "x": random.uniform(x_min, x_max),
+        "y": random.uniform(y_min, y_max)
     })
+
 save_json(nodes, "nodes.json")
 
 print("Creating links...")

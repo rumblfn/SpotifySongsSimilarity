@@ -10,7 +10,7 @@ const router = createBrowserRouter([
 
 export const AppRouter = () => {
   return (
-    <div>
+    <div className="page">
       <RouterProvider router={router} />
     </div>
   )

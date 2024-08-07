@@ -48,6 +48,8 @@
 }
 
 .page {
-  background-color: red;
+  background-color: black;
   flex-grow: 1;
+  height: 100%;
+  overflow: hidden;
 }
